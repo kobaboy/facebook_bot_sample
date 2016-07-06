@@ -1,10 +1,10 @@
 <?php
 
 require('../vendor/autoload.php');
-define('API_KEY', '2f734131317372342f6349526874514b45363242444d773644336570794462513951575247755834784543');
+//define('API_KEY', '2f734131317372342f6349526874514b45363242444d773644336570794462513951575247755834784543');
 //require_once(__DIR__ . '/vendor/autoload.php');
 use jp3cki\docomoDialogue\Dialogue;
-$dialog = new Dialogue(API_KEY);
+$dialog = new Dialogue('2f734131317372342f6349526874514b45363242444d773644336570794462513951575247755834784543');
 
 
 use Symfony\Component\HttpFoundation\Request;
