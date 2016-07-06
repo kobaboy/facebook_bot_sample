@@ -1,6 +1,11 @@
 <?php
 
 require('../vendor/autoload.php');
+define('API_KEY', '2f734131317372342f6349526874514b45363242444d773644336570794462513951575247755834784543');
+//require_once(__DIR__ . '/vendor/autoload.php');
+use jp3cki\docomoDialogue\Dialogue;
+$dialog = new Dialogue(API_KEY);
+
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +41,21 @@ $app->post('/callback', function (Request $request) use ($app) {
         foreach ($obj['messaging'] as $m) {
             $app['monolog']->addInfo(sprintf('messaging: %s', json_encode($m)));
             $from = $m['sender']['id'];
+			
+			// 相手からのメッセージをtextに代入
             $text = $m['message']['text'];
+			
+			//Docomo
+	        // 送信パラメータの準備
+	        $dialog->parameter->reset();
+	        $dialog->parameter->utt = $text;
+	        $dialog->parameter->context = $context;
+	        $dialog->parameter->mode = $mode;
+	        $ret = $dialog->request();
+	        if($ret === false) {
+	            $text = "通信に失敗しました";
+	        }
+	        $text = $ret->utt;
 
             if ($text) {
                 $path = sprintf('me/messages?access_token=%s', getenv('FACEBOOK_PAGE_ACCESS_TOKEN'));
